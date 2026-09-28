@@ -1,0 +1,16 @@
+OIL INDIA LIMITED - DAILY DRILLING REPORT (DDR #42)
+JORAJAN ASSET - SYNTHETIC DATA FOR SIH26121 PROTOTYPE
+
+WELL IDENTIFICATION:
+Well Name: Jorajan-18 | UWI: OIL-JRN-18 | Depth: 3,680 m MD (3,620 m TVD)
+Formation: Kopili Shale | Hole Size: 8-1/2 inch | Mud Weight: 11.2 ppg
+
+INCIDENT LOG:
+- Encountered splintery cavings and high shaker volume while drilling through Kopili Shale at 3,650 - 3,680 m MD.
+- Annular backpressure increased by 350 psi due to annular pack-off.
+- Mud weight raised from 10.8 ppg to 11.2 ppg with added polymer encapsulator (PHPA 1.5 lb/bbl) to inhibit shale hydration and prevent hole collapse.
+- Circulated high-viscosity sweep pill (40 bbl) to clean wellbore. Recovered 8 bbl of reactive shale cavings.
+- Drag dropped from 45 klbs to normal baseline (12 klbs).
+
+RECOMMENDATION:
+For nearby spuds, maintain minimum 11.2 ppg mud density and KCl concentration > 7% when penetrating Kopili Shale interval.
