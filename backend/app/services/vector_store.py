@@ -128,16 +128,11 @@ class VectorStoreService:
         """Searches vector index and returns top matching chunks with scores and metadata."""
         if not self.use_fallback and self.collection is not None:
             try:
-                where_filter = {}
-                if well_filter:
-                    where_filter["well_name"] = well_filter
-                if formation_filter:
-                    where_filter["formation"] = formation_filter
-
+                # Query top candidates from ChromaDB
+                query_k = min(top_k * 4, 30)
                 results = self.collection.query(
                     query_texts=[query],
-                    n_results=top_k,
-                    where=where_filter if where_filter else None
+                    n_results=query_k
                 )
 
                 citations = []
@@ -147,18 +142,46 @@ class VectorStoreService:
                     distances = results["distances"][0] if "distances" in results and results["distances"] else [0.2] * len(docs)
 
                     for doc, meta, dist in zip(docs, metas, distances):
+                        w_meta = str(meta.get("well_name", "")).lower()
+                        f_meta = str(meta.get("formation", "")).lower()
+
+                        if well_filter and well_filter.lower() not in w_meta:
+                            continue
+                        if formation_filter and formation_filter.lower() not in f_meta:
+                            continue
+
                         citations.append({
                             "snippet": doc,
                             "document_name": meta.get("document_name", "Oil Field Report"),
                             "well_name": meta.get("well_name", "General Offset"),
                             "formation": meta.get("formation", "N/A"),
                             "depth_interval": meta.get("depth_interval", "N/A"),
+                            "page_number": meta.get("page_number", 1),
                             "score": round(max(0.1, 1.0 - (dist if dist is not None else 0.5)), 2)
                         })
+
+                    # If strict filtering yielded fewer than needed, relax filter
+                    if len(citations) < top_k:
+                        for doc, meta, dist in zip(docs, metas, distances):
+                            cand = {
+                                "snippet": doc,
+                                "document_name": meta.get("document_name", "Oil Field Report"),
+                                "well_name": meta.get("well_name", "General Offset"),
+                                "formation": meta.get("formation", "N/A"),
+                                "depth_interval": meta.get("depth_interval", "N/A"),
+                                "page_number": meta.get("page_number", 1),
+                                "score": round(max(0.1, 1.0 - (dist if dist is not None else 0.5)), 2)
+                            }
+                            if not any(c["snippet"] == doc for c in citations):
+                                citations.append(cand)
+                            if len(citations) >= top_k:
+                                break
+
                 if citations:
-                    return citations
+                    return citations[:top_k]
             except Exception as e:
                 logger.warning(f"Chroma search warning: {e}. Executing fallback vector search.")
+
 
         # Fallback search using token scoring
         query_tokens = set(SimpleEmbeddingEngine.tokenize(query))

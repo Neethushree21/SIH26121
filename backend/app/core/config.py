@@ -34,6 +34,12 @@ if settings.DATABASE_URL.startswith("sqlite:///."):
     abs_db = os.path.abspath(os.path.join(ROOT_DIR, clean_rel)).replace("\\", "/")
     settings.DATABASE_URL = f"sqlite:///{abs_db}"
 
+if not os.path.isabs(settings.CHROMA_PERSIST_DIR):
+    settings.CHROMA_PERSIST_DIR = os.path.abspath(os.path.join(ROOT_DIR, settings.CHROMA_PERSIST_DIR.lstrip("./\\")))
+
+if not os.path.isabs(settings.UPLOAD_DIR):
+    settings.UPLOAD_DIR = os.path.abspath(os.path.join(ROOT_DIR, settings.UPLOAD_DIR.lstrip("./\\")))
+
 # Ensure directories exist
 os.makedirs(settings.CHROMA_PERSIST_DIR, exist_ok=True)
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
