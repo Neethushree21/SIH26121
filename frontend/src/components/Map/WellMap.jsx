@@ -89,54 +89,50 @@ export default function WellMap({
   }, [offsetWells]);
 
   return (
-    <div className="relative w-full h-full min-h-[550px] flex flex-col rounded-xl overflow-hidden border border-oil-border bg-slate-950 shadow-2xl">
+    <div className="relative w-full h-[340px] xl:h-[360px] shrink-0 flex flex-col rounded-xl overflow-hidden border border-slate-700/80 bg-slate-950 shadow-xl">
       
       {/* Top Map Floating Control Toolbar */}
-      <div className="absolute top-3 left-3 z-[1000] flex flex-wrap items-center gap-2 bg-slate-900/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700/60 shadow-xl">
+      <div className="absolute top-2.5 left-2.5 right-2.5 z-[1000] flex flex-wrap items-center justify-between gap-1.5 bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/60 shadow-lg text-xs">
         <div className="flex items-center space-x-1.5 text-xs font-semibold text-amber-400">
-          <Target className="w-4 h-4 text-amber-400" />
-          <span>Planned Spud:</span>
+          <Target className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+          <span className="font-mono text-[11px] text-slate-200">
+            {spudLocation.lat.toFixed(3)}°N, {spudLocation.lon.toFixed(3)}°E
+          </span>
         </div>
-        <div className="font-mono text-xs text-slate-200 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">
-          {spudLocation.lat.toFixed(4)}°N, {spudLocation.lon.toFixed(4)}°E
-        </div>
-
-        <div className="h-4 w-[1px] bg-slate-700 mx-1 hidden sm:block"></div>
 
         {/* Radius buffer selector */}
-        <div className="flex items-center space-x-2 text-xs">
-          <span className="text-slate-400 font-medium">Offset Buffer:</span>
-          <div className="flex items-center space-x-1 bg-slate-800/80 p-0.5 rounded-lg border border-slate-700">
-            {[3, 5, 8, 15].map((r) => (
+        <div className="flex items-center space-x-1">
+          <span className="text-slate-400 text-[10px]">Buffer:</span>
+          <div className="flex items-center space-x-0.5 bg-slate-800 p-0.5 rounded border border-slate-700">
+            {[3, 5, 10, 15].map((r) => (
               <button
                 key={r}
                 onClick={() => onRadiusChange(r)}
-                className={`px-2 py-0.5 rounded text-xs font-bold transition ${
+                className={`px-1.5 py-0.2 rounded text-[10px] font-bold transition ${
                   radiusKm === r
-                    ? "bg-amber-500 text-black shadow-sm"
+                    ? "bg-amber-500 text-black shadow-xs"
                     : "text-slate-300 hover:text-white"
                 }`}
               >
-                {r} km
+                {r}k
               </button>
             ))}
           </div>
         </div>
 
-        <div className="h-4 w-[1px] bg-slate-700 mx-1 hidden sm:block"></div>
-
         {/* Offset Wells Count */}
-        <div className="text-xs font-semibold text-emerald-400 flex items-center gap-1">
-          <ShieldCheck className="w-3.5 h-3.5" />
-          <span>{offsetWells.length} Offset Wells Inside Buffer</span>
+        <div className="text-[10px] font-semibold text-emerald-400 flex items-center gap-1 font-mono">
+          <ShieldCheck className="w-3 h-3" />
+          <span>{offsetWells.length} Offsets</span>
         </div>
       </div>
 
       {/* Map Interactive Hint Bottom Left */}
-      <div className="absolute bottom-3 left-3 z-[1000] hidden md:flex items-center space-x-2 bg-slate-900/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-800 text-[11px] text-slate-400">
-        <Crosshair className="w-3.5 h-3.5 text-amber-400" />
-        <span>Click anywhere on map to reposition planned spud location</span>
+      <div className="absolute bottom-2 left-2 z-[1000] hidden sm:flex items-center space-x-1 bg-slate-900/85 backdrop-blur-md px-2 py-1 rounded text-[10px] text-slate-400 border border-slate-800">
+        <Crosshair className="w-3 h-3 text-amber-400" />
+        <span>Click to reposition spud</span>
       </div>
+
 
       {/* Map Legend Floating Bottom Right */}
       <div className="absolute bottom-3 right-3 z-[1000] bg-slate-900/90 backdrop-blur-md p-2.5 rounded-xl border border-slate-700/60 shadow-xl text-xs space-y-1.5">
