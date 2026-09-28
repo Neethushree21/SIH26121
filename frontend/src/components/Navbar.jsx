@@ -7,7 +7,8 @@ import {
   Database,
   Activity,
   Sparkles,
-  MapPin
+  MapPin,
+  LogOut
 } from "lucide-react";
 
 export default function Navbar({
@@ -18,7 +19,9 @@ export default function Navbar({
   wells,
   onOpenIngest,
   totalWellsCount,
-  activeAlertsCount
+  activeAlertsCount,
+  currentUser,
+  onLogout
 }) {
   const fields = [
     { id: "", label: "All Assam Fields" },
@@ -125,9 +128,39 @@ export default function Navbar({
             <FileText className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Ingest Reports</span>
           </button>
+
+          {/* Authenticated User Profile & Logout */}
+          {currentUser && (
+            <div className="flex items-center space-x-2 pl-2 border-l border-slate-800">
+              <div className="hidden xl:flex flex-col text-right">
+                <span className="text-xs font-bold text-slate-200 leading-tight">
+                  {currentUser.full_name}
+                </span>
+                <span className="text-[10px] text-amber-400 font-mono leading-tight">
+                  {currentUser.role}
+                </span>
+              </div>
+              <div
+                title={`${currentUser.full_name} (${currentUser.email})`}
+                className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-amber-400"
+              >
+                {currentUser.full_name ? currentUser.full_name.charAt(0) : "U"}
+              </div>
+              {onLogout && (
+                <button
+                  onClick={onLogout}
+                  title="Sign out & lock session"
+                  className="p-1.5 rounded-lg bg-slate-900 hover:bg-red-500/20 text-slate-400 hover:text-red-400 border border-slate-800 hover:border-red-500/30 transition"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
       </div>
     </header>
   );
 }
+

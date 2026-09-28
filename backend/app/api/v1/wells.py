@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.core.database import get_db
 from app.models.well import Well
+from app.models.user import User
+from app.core.security import get_optional_current_user
 from app.schemas.well import WellSummarySchema, WellDetailSchema, GeoJSONFeatureCollection
 from app.schemas.query import NearbyWellsQuery, NearbyWellsResponse, OffsetWellResult
 from app.services.geospatial import find_nearby_wells, generate_wells_geojson
@@ -55,7 +57,8 @@ def get_nearby_wells_get(
     formation: Optional[str] = Query(default=None, description="Target formation (e.g. Barail, Tipam)"),
     planned_mud_weight: Optional[float] = Query(default=None, description="Planned mud weight (ppg)"),
     limit: int = Query(default=20, ge=1, le=100),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_current_user)
 ):
     """
     Executes PostGIS ST_DWithin spatial query and ranks candidate offset wells
@@ -86,7 +89,11 @@ def get_nearby_wells_get(
     )
 
 @router.post("/nearby", response_model=NearbyWellsResponse)
-def get_nearby_wells(payload: NearbyWellsQuery, db: Session = Depends(get_db)):
+def get_nearby_wells(
+    payload: NearbyWellsQuery,
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_current_user)
+):
     offset_wells = find_nearby_wells(
         db=db,
         target_lat=payload.latitude,

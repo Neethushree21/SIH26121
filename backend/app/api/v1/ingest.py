@@ -9,6 +9,8 @@ from datetime import datetime
 from app.core.database import get_db, SessionLocal
 from app.core.config import settings
 from app.models.document import IngestedDocument
+from app.models.user import User
+from app.core.security import get_optional_current_user
 from app.services.ingestion import ingestion_service, INGESTION_TASKS
 
 router = APIRouter()
@@ -19,7 +21,8 @@ class FolderIngestRequest(BaseModel):
 @router.post("/folder")
 def trigger_folder_ingestion(
     payload: FolderIngestRequest,
-    background_tasks: BackgroundTasks
+    background_tasks: BackgroundTasks,
+    current_user: Optional[User] = Depends(get_optional_current_user)
 ):
     """
     Scans a folder recursively for .pdf, .csv, .xlsx, .txt files,
@@ -78,7 +81,8 @@ def get_task_status(task_id: str):
 @router.post("/upload")
 async def upload_document(
     file: UploadFile = File(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_current_user)
 ):
     """Uploads a report (PDF, TXT, CSV, XLSX) and processes it into the vector store."""
     os.makedirs(settings.UPLOAD_DIR, exist_ok=True)

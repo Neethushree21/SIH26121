@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     CHROMA_PERSIST_DIR: str = os.getenv("CHROMA_PERSIST_DIR", os.path.join(ROOT_DIR, "chroma_data"))
     UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", os.path.join(ROOT_DIR, "uploads"))
     
+    # JWT Security Configuration
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "oil-india-nwis-sih26121-jwt-secret-key-super-secure-token-9988")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "1440")) # 24 hours
+    
     CORS_ORIGINS: Union[str, List[str]] = [
         "http://localhost:5173",
         "http://localhost:3000",

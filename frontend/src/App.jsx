@@ -7,9 +7,10 @@ import RTMACMonitor from "./components/Telemetry/RTMACMonitor";
 import RiskFeed from "./components/Alerts/RiskFeed";
 import RAGChat from "./components/Chat/RAGChat";
 import DocumentIngestModal from "./components/Ingest/DocumentIngestModal";
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import { fetchWells, queryNearbyWells, fetchWellDetail, fetchHazardFeed } from "./utils/api";
 
-export default function App() {
+function DashboardContent({ onLogout, currentUser }) {
   const [wells, setWells] = useState([]);
   const [offsetWells, setOffsetWells] = useState([]);
   const [selectedField, setSelectedField] = useState("");
@@ -82,7 +83,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-black">
       
-      {/* 1. Global Navigation Bar with System Badges and Operational Controls */}
+      {/* 1. Global Navigation Bar with System Badges, Active User, and Operational Controls */}
       <Navbar
         selectedField={selectedField}
         onSelectField={setSelectedField}
@@ -92,6 +93,8 @@ export default function App() {
         onOpenIngest={() => setIngestModalOpen(true)}
         totalWellsCount={wells.length}
         activeAlertsCount={hazardCount}
+        currentUser={currentUser}
+        onLogout={onLogout}
       />
 
       {/* 2. Enterprise 3-Column Industrial Dark-Mode Control Room Dashboard */}
@@ -170,5 +173,15 @@ export default function App() {
       )}
 
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ProtectedRoute>
+      {({ onLogout, currentUser }) => (
+        <DashboardContent onLogout={onLogout} currentUser={currentUser} />
+      )}
+    </ProtectedRoute>
   );
 }
