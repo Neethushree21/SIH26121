@@ -4,7 +4,7 @@ from typing import List, Optional
 from app.core.database import get_db
 from app.models.drilling_event import DrillingHazard
 from app.models.well import Well
-from app.schemas.alert import HazardAlert, RiskAssessmentRequest, RiskAssessmentResponse
+from app.schemas.alert import HazardAlert, RiskAssessmentRequest, RiskAssessmentResponse, OffsetRisksAuditResponse
 from app.services.risk_engine import risk_engine
 
 router = APIRouter()
@@ -51,4 +51,29 @@ def assess_spud_location_risks(payload: RiskAssessmentRequest, db: Session = Dep
         planned_tvd=payload.planned_tvd,
         radius_km=payload.radius_km,
         target_formation=payload.target_formation
+    )
+
+@router.get("/offset-risks", response_model=OffsetRisksAuditResponse)
+def get_explainable_offset_risks(
+    latitude: float = Query(..., description="Target spud latitude in decimal degrees"),
+    longitude: float = Query(..., description="Target spud longitude in decimal degrees"),
+    planned_depth_md: float = Query(default=3700.0, description="Planned total depth MD (m)"),
+    radius_km: float = Query(default=10.0, ge=0.1, le=100.0, description="Corridor radius in km"),
+    formation: Optional[str] = Query(default=None, description="Planned target formation (e.g. Barail, Tipam)"),
+    db: Session = Depends(get_db)
+):
+    """
+    Returns an explainable, audit-ready drilling hazard report with:
+      1. Risk Type & Severity Score (Hybrid ML probability)
+      2. The 'Why?' Evidence Chain (matched offset wells, distance, depth, formation)
+      3. Recommended Mitigation Actions
+      4. Exact Document Citations from ChromaDB (file, page, snippet)
+    """
+    return risk_engine.generate_evidence_chain_alerts(
+        db=db,
+        target_lat=latitude,
+        target_lon=longitude,
+        planned_depth_md=planned_depth_md,
+        radius_km=radius_km,
+        formation=formation
     )

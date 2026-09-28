@@ -113,3 +113,31 @@ export async function fetchIngestionStatus() {
   if (!res.ok) throw new Error("Failed to fetch ingestion status");
   return res.json();
 }
+
+export async function fetchExplainableOffsetRisks(lat, lon, plannedDepth = 3700.0, radiusKm = 10.0, formation = "") {
+  const params = new URLSearchParams({
+    latitude: parseFloat(lat),
+    longitude: parseFloat(lon),
+    planned_depth_md: parseFloat(plannedDepth),
+    radius_km: parseFloat(radiusKm)
+  });
+  if (formation) params.append("formation", formation);
+
+  const res = await fetch(`${API_BASE}/alerts/offset-risks?${params.toString()}`);
+  if (!res.ok) throw new Error("Failed to fetch explainable offset risks");
+  return res.json();
+}
+
+export async function fetchTelemetryTick() {
+  const res = await fetch(`${API_BASE}/rtmac/tick`);
+  if (!res.ok) throw new Error("Failed to fetch eRTMAC telemetry tick");
+  return res.json();
+}
+
+export async function resetTelemetrySimulation(depthMd = 2320.0, mudWeight = 10.4) {
+  const res = await fetch(`${API_BASE}/rtmac/reset?depth_md=${depthMd}&mud_weight=${mudWeight}`, {
+    method: "POST"
+  });
+  if (!res.ok) throw new Error("Failed to reset telemetry simulation");
+  return res.json();
+}

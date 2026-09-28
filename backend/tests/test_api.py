@@ -99,6 +99,44 @@ def test_folder_ingestion():
     assert status_data["status"] in ["QUEUED", "SCANNING", "PROCESSING", "COMPLETED"]
     print(f"[PASS] GET /ingest/status/{{task_id}} passed (Status: {status_data['status']})")
 
+def test_rtmac_telemetry():
+    # Test GET /api/v1/rtmac/tick
+    response = client.get("/api/v1/rtmac/tick")
+    assert response.status_code == 200
+    data = response.json()
+    assert "telemetry" in data
+    assert "ml_hazard_probabilities" in data
+    assert "hybrid_risk_tier" in data
+    telem = data["telemetry"]
+    probs = data["ml_hazard_probabilities"]
+    assert telem["depth_md"] > 0
+    assert "gas_kick_prob" in probs
+    assert "loss_circulation_prob" in probs
+    assert "stuck_pipe_prob" in probs
+    print(f"[PASS] eRTMAC Telemetry Tick passed (Depth: {telem['depth_md']}m, ROP: {telem['rop_m_hr']}m/hr, Risk Tier: {data['hybrid_risk_tier']})")
+
+def test_explainable_evidence_chain():
+    # Test GET /api/v1/alerts/offset-risks
+    params = {
+        "latitude": 27.2891,
+        "longitude": 95.3524,
+        "planned_depth_md": 3700.0,
+        "radius_km": 15.0,
+        "formation": "Barail Sandstone"
+    }
+    response = client.get("/api/v1/alerts/offset-risks", params=params)
+    assert response.status_code == 200
+    data = response.json()
+    assert "alerts" in data
+    assert len(data["alerts"]) > 0
+    first_alert = data["alerts"][0]
+    assert "risk_type" in first_alert
+    assert "probability_pct" in first_alert
+    assert "why_evidence_chain" in first_alert
+    assert "recommended_mitigations" in first_alert
+    assert "document_citations" in first_alert
+    print(f"[PASS] Explainable Evidence-Chain Alerts passed ({len(data['alerts'])} hazard risks audit-ready; Top: {first_alert['risk_type']} [{first_alert['probability_pct']}%])")
+
 if __name__ == "__main__":
     test_health()
     test_list_wells()
@@ -107,5 +145,7 @@ if __name__ == "__main__":
     test_hazard_feed()
     test_rag_search()
     test_folder_ingestion()
-    print("\nALL PHASE 2 BACKEND API TESTS PASSED SUCCESSFULLY!")
+    test_rtmac_telemetry()
+    test_explainable_evidence_chain()
+    print("\nALL PHASE 1, 2 & 3 BACKEND API TESTS PASSED SUCCESSFULLY!")
 
