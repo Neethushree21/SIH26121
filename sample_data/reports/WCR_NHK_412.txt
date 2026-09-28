@@ -1,0 +1,32 @@
+================================================================================
+OIL INDIA LIMITED - DRILLING & EXPLORATION DEPARTMENT, DULIAJAN
+WELL COMPLETION REPORT (WCR)
+================================================================================
+WELL NAME: Nahorkatiya-412 (NHK-412) UWI: OIL-NHK-412
+FIELD: Nahorkatiya Field             LOCATION: Lat 27.2891° N, Long 95.3524° E
+OPERATOR: Oil India Limited          TOTAL DEPTH: 3,780 m MD / 3,695 m TVD
+SPUD DATE: 12-JAN-2024               COMPLETION DATE: 24-APR-2024
+STATUS: Producing Oil & Gas          KB ELEVATION: 122.0 m
+
+GEOLOGICAL LOG AND FORMATION BOUNDARIES:
+- Girujan Formation: 380 m - 1,840 m TVD (Massive variegated clays)
+- Tipam Sandstone: 1,840 m - 2,790 m TVD (High porosity 24-28%, lost circulation risks)
+- Barail Coal-Shale: 2,790 m - 3,380 m TVD (Overpressure transition zone, gas kicks)
+- Barail First Sand / Main Sand: 3,380 m - 3,580 m TVD (Prolific oil reservoir)
+- Kopili Shale: 3,580 m - 3,695 m TVD (Base seal)
+
+CASING SCHEME:
+- 20" Conductor @ 90 m
+- 13-3/8" Surface @ 1,180 m
+- 9-5/8" Intermediate @ 2,780 m (Cased off entire Tipam loss zone before Barail drilling)
+- 5-1/2" Production Casing @ 3,765 m
+
+HAZARDS RECORDED:
+1. Lost circulation at 2,340 m MD (recovered using LCM nutshell/mica pill).
+2. Tight hole and swab surges in Girujan clay at 1,420 m MD. Controlled by reducing tripping speed to 1 stand per 2 minutes.
+
+PRODUCTION SUMMARY:
+Perforations: 3,410 m - 3,425 m in Barail Sand.
+Flow rate: 110 m3/day light crude oil (API 34.2°), GOR: 180 m3/m3.
+Water cut: 0%. Well placed on continuous gas lift.
+================================================================================

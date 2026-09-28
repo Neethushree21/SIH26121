@@ -1,0 +1,83 @@
+[
+  {
+    "well_uwi": "OIL-NHK-412",
+    "formation_name": "Girujan Clay",
+    "top_md": 380.0,
+    "top_tvd": 380.0,
+    "base_tvd": 1840.0,
+    "pore_pressure_gradient_ppg": 9.4,
+    "lithology_description": "Soft reactive variegated claystone, risk of bit balling and tight hole."
+  },
+  {
+    "well_uwi": "OIL-NHK-412",
+    "formation_name": "Tipam Sandstone",
+    "top_md": 1860.0,
+    "top_tvd": 1840.0,
+    "base_tvd": 2790.0,
+    "pore_pressure_gradient_ppg": 9.6,
+    "lithology_description": "Highly porous coarse sandstone, partial to severe loss circulation risk."
+  },
+  {
+    "well_uwi": "OIL-NHK-412",
+    "formation_name": "Barail Coal-Shale",
+    "top_md": 2850.0,
+    "top_tvd": 2790.0,
+    "base_tvd": 3380.0,
+    "pore_pressure_gradient_ppg": 11.2,
+    "lithology_description": "Overpressured transition zone with coal stringers, gas kick hazard."
+  },
+  {
+    "well_uwi": "OIL-NHK-412",
+    "formation_name": "Barail Main Sand",
+    "top_md": 3460.0,
+    "top_tvd": 3380.0,
+    "base_tvd": 3580.0,
+    "pore_pressure_gradient_ppg": 10.8,
+    "lithology_description": "Primary high-productivity oil reservoir in Nahorkatiya."
+  },
+  {
+    "well_uwi": "OIL-BGH-03",
+    "formation_name": "Girujan Clay",
+    "top_md": 450.0,
+    "top_tvd": 450.0,
+    "base_tvd": 1950.0,
+    "pore_pressure_gradient_ppg": 9.5,
+    "lithology_description": "Shallow swelling shales."
+  },
+  {
+    "well_uwi": "OIL-BGH-03",
+    "formation_name": "Tipam Sandstone",
+    "top_md": 1980.0,
+    "top_tvd": 1950.0,
+    "base_tvd": 2920.0,
+    "pore_pressure_gradient_ppg": 9.8,
+    "lithology_description": "Massive quartzose sandstone."
+  },
+  {
+    "well_uwi": "OIL-BGH-03",
+    "formation_name": "Barail Coal-Shale",
+    "top_md": 2980.0,
+    "top_tvd": 2920.0,
+    "base_tvd": 3650.0,
+    "pore_pressure_gradient_ppg": 11.8,
+    "lithology_description": "Abnormal pore pressure gradient with heavy gas influx risks."
+  },
+  {
+    "well_uwi": "OIL-MOR-88",
+    "formation_name": "Tipam Sandstone",
+    "top_md": 1940.0,
+    "top_tvd": 1910.0,
+    "base_tvd": 2860.0,
+    "pore_pressure_gradient_ppg": 9.2,
+    "lithology_description": "Depleted reservoir sandstone susceptible to differential sticking."
+  },
+  {
+    "well_uwi": "OIL-MOR-88",
+    "formation_name": "Barail Main Sand",
+    "top_md": 3510.0,
+    "top_tvd": 3450.0,
+    "base_tvd": 3620.0,
+    "pore_pressure_gradient_ppg": 10.9,
+    "lithology_description": "Productive hydrocarbon sand."
+  }
+]

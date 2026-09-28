@@ -1,0 +1,41 @@
+================================================================================
+OIL INDIA LIMITED - DRILLING & EXPLORATION DEPARTMENT, DULIAJAN
+WELL COMPLETION REPORT (WCR)
+================================================================================
+WELL NAME: Moran-88 (MOR-88)        UWI: OIL-MOR-88
+FIELD: Moran Oil Field               LOCATION: Lat 27.1842° N, Long 94.9214° E
+OPERATOR: Oil India Limited          TOTAL DEPTH: 3,920 m MD / 3,845 m TVD
+SPUD DATE: 02-AUG-2023               COMPLETION DATE: 18-NOV-2023
+STATUS: Oil Producer (Dual String)   KB ELEVATION: 118.5 m
+
+STRATIGRAPHIC TOPS (ASSAM SHELF BASIN):
+- Alluvium / Dihing: Surface to 420 m TVD
+- Girujan Claystone: 420 m to 1,910 m TVD (Plastocene swelling clays, tight hole tendencies)
+- Tipam Sandstone: 1,910 m to 2,860 m TVD (Massive porous sands, high permeability)
+- Barail Coal-Shale: 2,860 m to 3,450 m TVD (Interbedded high pressure sands and coals)
+- Barail Main Sand (BMS): 3,450 m to 3,620 m TVD (Target reservoir, clean sand)
+- Kopili Formation: 3,620 m to 3,845 m TVD (Hard dark calcareous shales)
+
+CASING AND CEMENTING RECORD:
+- 20" Conductor Casing set at 95 m (cemented to surface)
+- 13-3/8" Surface Casing set at 1,150 m (slurry density 15.6 ppg)
+- 9-5/8" Intermediate Casing set at 2,850 m (covers entire Tipam depleted zone)
+- 7" Production Casing set at 3,840 m (cemented up to 2,500 m)
+
+OPERATIONAL HAZARDS ENCOUNTERED & NON-PRODUCTIVE TIME (NPT):
+1. Differential Sticking at 2,890 m MD (Tipam Sandstone Base):
+   - Overbalance of 380 psi across depleted sand resulted in drillstring sticking during 45-minute survey pause.
+   - Initial maximum overpull of 90 klbs failed to free string.
+   - Remediation: Spotted 45 bbl ester-based lubricating pipe-freeing soak pill.
+   - String came free after 4.5 hours of soaking with 60 klbs upward jar impacts.
+   - Total NPT: 16.5 hours.
+
+2. Casing Wear & Mud Weight Window:
+   - Mud weight through Barail section maintained strictly at 10.8 - 11.1 ppg.
+   - High torque observed in doglegs exceeding 3.5°/30m.
+
+COMPLETION & TESTING RESULTS:
+Perforated Barail Main Sand interval: 3,492 m - 3,514 m (6 SPF).
+Tested on 16/64" choke: 92 klopd (kilo litres oil per day) + 42,000 scm/d associated natural gas.
+Tubing head pressure: 1,480 psi. BS&W: 0.8%.
+================================================================================

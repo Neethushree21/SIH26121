@@ -1,0 +1,33 @@
+================================================================================
+OIL INDIA LIMITED - FIELD HEADQUARTERS, DULIAJAN, ASSAM
+DAILY DRILLING REPORT (DDR) - REPORT NO: 14
+================================================================================
+WELL: Nahorkatiya-412 (NHK-412)      UWI: OIL-NHK-412
+FIELD: Nahorkatiya                   SPUD DATE: 12-JAN-2024
+RIG: OIL-E-2000                      CURRENT DATE: 26-JAN-2024
+CURRENT DEPTH: 2,348.0 m MD / 2,342.5 m TVD
+HOLE SIZE: 12-1/4"                  LAST CASING: 13-3/8" @ 1,180 m
+FORMATION: Tipam Sandstone Upper Member
+MUD SYSTEM: High Performance Water Based Mud (HP-WBM)
+MUD WEIGHT: 10.4 ppg                VISCOSITY: 48 sec/qt   PV: 18   YP: 22
+
+24-HOUR OPERATIONAL SUMMARY:
+00:00 - 06:00: Rotary drilling 12-1/4" hole from 2,280 m to 2,340 m MD with WOB 22 klbs, RPM 110, GPM 620.
+06:15 - 08:30: At depth 2,340 m MD, encountered fractured Tipam Sandstone interval. Sudden loss of returns observed.
+               Pit volume decreased by 45 bbl within 12 minutes (Partial to severe loss, rate 65 bbl/hr).
+08:30 - 11:00: Stopped drilling immediately, pulled off bottom 15 m to 2,325 m MD. Monitored annulus static level.
+               Annulus fluid dropped 40 meters below rotary table.
+11:00 - 14:00: Mixed and pumped 50 bbl high-fluid-loss LCM pill containing:
+               - 15 ppb Medium Nut Plug
+               - 10 ppb Coarse Calcium Carbonate
+               - 8 ppb Flaked Mica
+14:00 - 17:00: Displaced LCM pill to bit depth. Squeezed 15 bbl into formation with 250 psi squeeze pressure.
+               Shut down pumps and allowed pill to soak for 3 hours.
+17:00 - 20:00: Circulated slowly with 250 GPM. 100% full returns established! Dynamic loss rate 0 bbl/hr.
+20:00 - 24:00: Resumed drilling ahead carefully with reduced flow rate (520 GPM) and WOB 16 klbs. Reached 2,348 m MD.
+
+LESSONS LEARNED & DRILLING ENGINEER RECOMMENDATIONS:
+- Weak pore pressure window in Upper Tipam Sandstone requires strict equivalent circulating density (ECD) control.
+- Keep ECD below 10.8 ppg equivalent to avoid re-initiating losses.
+- Pre-treat active system with 8-10 ppb fine cellulosic loss material when approaching 2,300 m MD in offset wells.
+================================================================================

@@ -1,0 +1,43 @@
+================================================================================
+OIL INDIA LIMITED - FIELD HEADQUARTERS, DULIAJAN, ASSAM
+DAILY DRILLING REPORT (DDR) - REPORT NO: 28
+================================================================================
+WELL: Baghjan-03 (BGH-03)           UWI: OIL-BGH-03
+FIELD: Baghjan                      SPUD DATE: 05-FEB-2024
+RIG: BHEL-2000-AC                   CURRENT DATE: 04-MAR-2024
+CURRENT DEPTH: 3,425.0 m MD / 3,410.2 m TVD
+HOLE SIZE: 8-1/2"                   LAST CASING: 9-5/8" @ 2,820 m
+FORMATION: Barail Coal-Shale / Lower Sand Sequence
+MUD SYSTEM: Polymer Glycol Inhibited Mud
+INITIAL MUD WEIGHT: 10.3 ppg        VISCOSITY: 52 sec/qt
+
+CRITICAL EVENT REPORT - HIGH PRESSURE GAS INFLUX (GAS KICK):
+14:20: While drilling ahead 8-1/2" section at 3,420 m MD into overpressured Barail coal stringer,
+       ROP abruptly increased from 6 m/hr to 32 m/hr (Drilling Break).
+14:23: Flow sensor alarm triggered. Monitored pit level: observed rapid gain of 18 bbl over 4 minutes.
+14:25: Immediately carried out Hard Shut-In Procedure:
+       - Stopped rotary and hoisted kelly/top drive 3 meters above table.
+       - Checked for flow with pumps off: positive flow confirmed.
+       - Closed Annular Blowout Preventer (BOP).
+       - Opened hydraulic choke line valve to choke manifold.
+14:35: Pressures stabilized on standpipe and casing gauges:
+       - Shut-In Drill Pipe Pressure (SIDPP): 440 psi
+       - Shut-In Casing Pressure (SICP): 680 psi
+       - Pit Gain Volume: 22 bbl gas/condensate influx
+
+WELL CONTROL EXECUTION:
+1. Kill Mud Weight Calculation:
+   KMW = Current MW + (SIDPP / (0.052 * TVD_ft))
+   KMW = 10.3 + (440 / (0.052 * 11,188)) = 11.06 ppg -> Selected 11.4 ppg safety margin.
+2. Executed Wait and Weight (Engineer's) Method:
+   Weighted up 400 bbl active mud to 11.4 ppg using barite.
+   Circulated out gas kick through adjustable choke maintaining constant bottom hole pressure.
+   Degasser registered 42% gas show at surface before flare ignition.
+3. Clean weighted returns observed. Both SIDPP and SICP dropped to 0 psi.
+4. Resumed circulation with 11.4 ppg mud. Well completely killed and stabilized.
+
+OFF-BOTTOM RECOMMENDATIONS FOR OFFSET WELLS IN BAGHJAN:
+- The Barail Coal-Shale sequence in Baghjan exhibits abnormal pore pressure transition starting at ~3,350 m TVD.
+- Maintain minimum 11.2 - 11.5 ppg mud weight before tagging Barail Main Sand.
+- Keep trip tank monitoring alarm set at +/- 3 bbl tolerance.
+================================================================================
