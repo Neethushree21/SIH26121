@@ -172,6 +172,30 @@ export async function fetchIngestionStatus() {
   return res.json();
 }
 
+export async function deleteIngestedDocument(documentId) {
+  const res = await fetch(`${API_BASE}/ingest/${documentId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders()
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to delete document");
+  }
+  return res.json();
+}
+
+export async function purgeAllIngestedDocuments() {
+  const res = await fetch(`${API_BASE}/ingest/purge/all`, {
+    method: "DELETE",
+    headers: getAuthHeaders()
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to purge documents");
+  }
+  return res.json();
+}
+
 export async function fetchExplainableOffsetRisks(lat, lon, plannedDepth = 3700.0, radiusKm = 10.0, formation = "") {
   const params = new URLSearchParams({
     latitude: parseFloat(lat),

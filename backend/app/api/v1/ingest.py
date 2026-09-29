@@ -12,6 +12,10 @@ from app.models.document import IngestedDocument
 from app.models.user import User
 from app.core.security import get_optional_current_user
 from app.services.ingestion import ingestion_service, INGESTION_TASKS
+from app.services.vector_store import vector_store_service
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -119,3 +123,80 @@ def get_all_ingested_documents(db: Session = Depends(get_db)):
         }
         for d in docs
     ]
+
+@router.delete("/purge/all")
+def purge_all_documents(
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_current_user)
+):
+    """
+    Purges all documents from the ingested documents database and vector store.
+    """
+    docs = db.query(IngestedDocument).all()
+    count = len(docs)
+    for doc in docs:
+        vector_store_service.delete_document(doc.filename)
+        upload_file_path = os.path.join(settings.UPLOAD_DIR, doc.filename)
+        if os.path.exists(upload_file_path):
+            try:
+                os.remove(upload_file_path)
+            except Exception as e:
+                logger.warning(f"Could not remove {upload_file_path}: {e}")
+        db.delete(doc)
+    db.commit()
+    return {
+        "success": True,
+        "message": f"Successfully deleted {count} documents from database and vector index.",
+        "purged_count": count
+    }
+
+@router.delete("/{document_id}")
+def delete_document(
+    document_id: str,
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_current_user)
+):
+    """
+    Deletes an ingested document by ID or filename, purges its vector embeddings from ChromaDB,
+    removes any physical file on disk, and deletes all matching records from the database.
+    """
+    doc = db.query(IngestedDocument).filter(
+        (IngestedDocument.id == document_id) | (IngestedDocument.filename == document_id)
+    ).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail=f"Document '{document_id}' not found.")
+
+    filename = doc.filename
+    # 1. Purge from vector store
+    deleted_chunks = vector_store_service.delete_document(filename)
+
+    # 2. Delete physical file from disk locations if present
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    possible_paths = [
+        os.path.join(settings.UPLOAD_DIR, filename),
+        os.path.join(base_dir, "uploads", filename),
+        os.path.join(base_dir, "backend", "uploads", filename),
+        os.path.join(base_dir, "sample_data", "reports", filename),
+    ]
+    for p in possible_paths:
+        if os.path.exists(p):
+            try:
+                os.remove(p)
+                logger.info(f"Removed physical file: {p}")
+            except Exception as e:
+                logger.warning(f"Could not remove physical file {p}: {e}")
+
+    # 3. Delete ALL records matching this filename (or ID) from SQL DB
+    deleted_db_rows = db.query(IngestedDocument).filter(
+        (IngestedDocument.filename == filename) | (IngestedDocument.id == document_id)
+    ).delete(synchronize_session=False)
+    db.commit()
+
+    return {
+        "success": True,
+        "message": f"Successfully deleted '{filename}' and purged its vector chunks.",
+        "deleted_id": document_id,
+        "filename": filename,
+        "deleted_records": deleted_db_rows
+    }
+

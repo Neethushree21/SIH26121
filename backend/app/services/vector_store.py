@@ -118,6 +118,36 @@ class VectorStoreService:
         self._save_fallback_index()
         return len(chunks)
 
+    def delete_document(self, filename: str) -> int:
+        """Deletes all chunks associated with a given filename from ChromaDB and fallback index."""
+        deleted_count = 0
+        if not self.use_fallback and self.collection is not None:
+            try:
+                results = self.collection.get()
+                matched_ids = []
+                if results and "ids" in results and "metadatas" in results:
+                    for cid, meta in zip(results["ids"], results["metadatas"]):
+                        fname = meta.get("file_name") or meta.get("document_name")
+                        if fname == filename:
+                            matched_ids.append(cid)
+                if matched_ids:
+                    self.collection.delete(ids=matched_ids)
+                    deleted_count += len(matched_ids)
+            except Exception as e:
+                logger.error(f"Error deleting document '{filename}' from ChromaDB: {e}")
+
+        # Also remove from fallback_docs
+        original_fallback_len = len(self.fallback_docs)
+        self.fallback_docs = [
+            d for d in self.fallback_docs
+            if d.get("metadata", {}).get("document_name") != filename and d.get("metadata", {}).get("file_name") != filename
+        ]
+        if len(self.fallback_docs) < original_fallback_len:
+            deleted_count += (original_fallback_len - len(self.fallback_docs))
+            self._save_fallback_index()
+
+        return deleted_count
+
     def search(
         self,
         query: str,

@@ -83,6 +83,7 @@ export default function WellMap({
   selectedWell
 }) {
   const [mapCenter, setMapCenter] = useState([27.35, 95.35]); // Assam basin center
+  const [mapStyle, setMapStyle] = useState("dark"); // "dark" or "satellite"
 
   const offsetWellIds = useMemo(() => {
     return new Set((offsetWells || []).map((w) => w.id));
@@ -100,23 +101,51 @@ export default function WellMap({
           </span>
         </div>
 
-        {/* Radius buffer selector */}
-        <div className="flex items-center space-x-1">
-          <span className="text-slate-400 text-[10px]">Buffer:</span>
-          <div className="flex items-center space-x-0.5 bg-slate-800 p-0.5 rounded border border-slate-700">
-            {[3, 5, 10, 15].map((r) => (
-              <button
-                key={r}
-                onClick={() => onRadiusChange(r)}
-                className={`px-1.5 py-0.2 rounded text-[10px] font-bold transition ${
-                  radiusKm === r
-                    ? "bg-amber-500 text-black shadow-xs"
-                    : "text-slate-300 hover:text-white"
-                }`}
-              >
-                {r}k
-              </button>
-            ))}
+        {/* Radius buffer selector & Layer Switcher */}
+        <div className="flex items-center space-x-2">
+          {/* Basemap Switcher (Free, No API Key Required) */}
+          <div className="flex items-center space-x-0.5 bg-slate-800 p-0.5 rounded border border-slate-700 text-[10px]">
+            <button
+              onClick={() => setMapStyle("dark")}
+              className={`px-1.5 py-0.5 rounded font-semibold transition ${
+                mapStyle === "dark"
+                  ? "bg-amber-500 text-black shadow-xs"
+                  : "text-slate-300 hover:text-white"
+              }`}
+              title="Clean Industrial Dark Mode Basemap"
+            >
+              Dark
+            </button>
+            <button
+              onClick={() => setMapStyle("satellite")}
+              className={`px-1.5 py-0.5 rounded font-semibold transition ${
+                mapStyle === "satellite"
+                  ? "bg-amber-500 text-black shadow-xs"
+                  : "text-slate-300 hover:text-white"
+              }`}
+              title="High-Resolution Satellite Terrain View"
+            >
+              Satellite
+            </button>
+          </div>
+
+          <div className="flex items-center space-x-1">
+            <span className="text-slate-400 text-[10px]">Buffer:</span>
+            <div className="flex items-center space-x-0.5 bg-slate-800 p-0.5 rounded border border-slate-700">
+              {[3, 5, 10, 15].map((r) => (
+                <button
+                  key={r}
+                  onClick={() => onRadiusChange(r)}
+                  className={`px-1.5 py-0.2 rounded text-[10px] font-bold transition ${
+                    radiusKm === r
+                      ? "bg-amber-500 text-black shadow-xs"
+                      : "text-slate-300 hover:text-white"
+                  }`}
+                >
+                  {r}k
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -162,11 +191,22 @@ export default function WellMap({
         scrollWheelZoom={true}
         className="w-full h-full"
       >
-        {/* Dark Matter / CartoDB High-Tech Basemap */}
-        <TileLayer
-          attribution='&copy; <a href="https://carto.com/">CARTO</a> | Oil India Limited'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-        />
+        {/* Free, Open-Access Basemap (Zero API Key, No Watermark) */}
+        {mapStyle === "dark" ? (
+          <TileLayer
+            key="esri-dark"
+            attribution='Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ | Oil India Limited'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+            maxZoom={16}
+          />
+        ) : (
+          <TileLayer
+            key="esri-satellite"
+            attribution='Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics | Oil India Limited'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            maxZoom={18}
+          />
+        )}
 
         <MapClickHandler
           onMapClick={(lat, lon) => {

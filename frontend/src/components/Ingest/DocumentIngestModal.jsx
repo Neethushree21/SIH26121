@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { X, UploadCloud, FolderSearch, FileText, CheckCircle, AlertCircle, RefreshCw, HardDrive, Play, Layers } from "lucide-react";
-import { uploadReportFile, fetchIngestionStatus, triggerFolderIngestion, fetchIngestionTaskStatus } from "../../utils/api";
+import { X, UploadCloud, FolderSearch, FileText, CheckCircle, AlertCircle, RefreshCw, HardDrive, Play, Layers, Trash2 } from "lucide-react";
+import { uploadReportFile, fetchIngestionStatus, triggerFolderIngestion, fetchIngestionTaskStatus, deleteIngestedDocument, purgeAllIngestedDocuments } from "../../utils/api";
 
 export default function DocumentIngestModal({ onClose }) {
   const [activeTab, setActiveTab] = useState("folder"); // "folder" or "upload"
@@ -18,6 +18,14 @@ export default function DocumentIngestModal({ onClose }) {
   const [batchTaskStatus, setBatchTaskStatus] = useState(null);
   const [folderScanning, setFolderScanning] = useState(false);
   const [folderError, setFolderError] = useState("");
+
+  // Document deletion state
+  const [deletingId, setDeletingId] = useState(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [confirmPurge, setConfirmPurge] = useState(false);
+  const [purgingAll, setPurgingAll] = useState(false);
+  const [actionFeedback, setActionFeedback] = useState("");
+  const [actionError, setActionError] = useState("");
 
   useEffect(() => {
     loadStatus();
@@ -92,6 +100,40 @@ export default function DocumentIngestModal({ onClose }) {
     } catch (err) {
       setFolderError(err.message || "Failed to initiate folder ingestion.");
       setFolderScanning(false);
+    }
+  };
+
+  const executeDelete = async (id, filename) => {
+    setDeletingId(id);
+    setActionFeedback("");
+    setActionError("");
+    try {
+      const res = await deleteIngestedDocument(id);
+      setActionFeedback(res.message || `Deleted "${filename}" and purged its vector embeddings.`);
+      setConfirmDeleteId(null);
+      await loadStatus();
+    } catch (err) {
+      console.error("Delete failed:", err);
+      setActionError(err.message || `Failed to delete ${filename}`);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const executePurgeAll = async () => {
+    setPurgingAll(true);
+    setActionFeedback("");
+    setActionError("");
+    try {
+      const res = await purgeAllIngestedDocuments();
+      setActionFeedback(res.message || "All indexed documents and vector chunks purged successfully.");
+      setConfirmPurge(false);
+      await loadStatus();
+    } catch (err) {
+      console.error("Purge failed:", err);
+      setActionError(err.message || "Failed to purge documents");
+    } finally {
+      setPurgingAll(false);
     }
   };
 
@@ -312,14 +354,63 @@ export default function DocumentIngestModal({ onClose }) {
                 <HardDrive className="w-4 h-4 text-amber-400" />
                 <span>Indexed Technical Reports in Vector Store ({documents.length})</span>
               </h3>
-              <button
-                onClick={loadStatus}
-                className="text-xs text-slate-400 hover:text-white flex items-center gap-1"
-              >
-                <RefreshCw className="w-3 h-3" />
-                <span>Refresh</span>
-              </button>
+              <div className="flex items-center space-x-2">
+                {documents.length > 0 && (
+                  confirmPurge ? (
+                    <div className="flex items-center space-x-1">
+                      <button
+                        type="button"
+                        onClick={executePurgeAll}
+                        disabled={purgingAll}
+                        className="text-[11px] bg-red-600 hover:bg-red-500 text-white font-bold px-2 py-1 rounded flex items-center gap-1 transition shadow"
+                      >
+                        {purgingAll ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+                        <span>Confirm Purge All?</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setConfirmPurge(false)}
+                        className="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-1.5 py-1 rounded transition"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setConfirmPurge(true)}
+                      disabled={purgingAll}
+                      className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 px-2 py-1 rounded flex items-center gap-1 transition disabled:opacity-50"
+                      title="Purge all indexed documents"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      <span>Purge All</span>
+                    </button>
+                  )
+                )}
+                <button
+                  type="button"
+                  onClick={loadStatus}
+                  className="text-xs text-slate-400 hover:text-white flex items-center gap-1 px-2 py-1 rounded hover:bg-slate-800 transition"
+                >
+                  <RefreshCw className="w-3 h-3" />
+                  <span>Refresh</span>
+                </button>
+              </div>
             </div>
+
+            {actionFeedback && (
+              <div className="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-2 rounded-lg flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                <span>{actionFeedback}</span>
+              </div>
+            )}
+            {actionError && (
+              <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <span>{actionError}</span>
+              </div>
+            )}
 
             <div className="border border-slate-800 rounded-xl overflow-hidden max-h-[220px] overflow-y-auto">
               <table className="w-full text-left text-xs">
@@ -330,6 +421,7 @@ export default function DocumentIngestModal({ onClose }) {
                     <th className="p-3">Format</th>
                     <th className="p-3">Chunks</th>
                     <th className="p-3">Status</th>
+                    <th className="p-3 text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800 text-slate-300">
@@ -347,11 +439,52 @@ export default function DocumentIngestModal({ onClose }) {
                           {d.status}
                         </span>
                       </td>
+                      <td className="p-3 text-right">
+                        {confirmDeleteId === d.id ? (
+                          <div className="flex items-center justify-end space-x-1">
+                            <button
+                              type="button"
+                              onClick={() => executeDelete(d.id, d.filename)}
+                              disabled={deletingId === d.id}
+                              className="px-2 py-0.5 rounded bg-red-600 hover:bg-red-500 text-white font-bold text-[10px] transition shadow flex items-center gap-1"
+                            >
+                              {deletingId === d.id ? (
+                                <RefreshCw className="w-2.5 h-2.5 animate-spin" />
+                              ) : (
+                                <Trash2 className="w-2.5 h-2.5" />
+                              )}
+                              <span>Delete?</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteId(null)}
+                              disabled={deletingId === d.id}
+                              className="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] transition"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteId(d.id)}
+                            disabled={deletingId === d.id}
+                            className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition disabled:opacity-50"
+                            title={`Delete ${d.filename}`}
+                          >
+                            {deletingId === d.id ? (
+                              <RefreshCw className="w-3.5 h-3.5 animate-spin text-red-400" />
+                            ) : (
+                              <Trash2 className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        )}
+                      </td>
                     </tr>
                   ))}
                   {documents.length === 0 && (
                     <tr>
-                      <td colSpan="5" className="p-6 text-center text-slate-500 text-xs">
+                      <td colSpan="6" className="p-6 text-center text-slate-500 text-xs">
                         No technical reports indexed yet. Trigger batch ingestion above.
                       </td>
                     </tr>
